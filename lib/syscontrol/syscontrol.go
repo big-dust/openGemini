@@ -27,6 +27,7 @@ import (
 	"github.com/openGemini/openGemini/engine/executor"
 	meta "github.com/openGemini/openGemini/lib/metaclient"
 	"github.com/openGemini/openGemini/lib/netstorage"
+	"github.com/openGemini/openGemini/open_src/influx/query"
 )
 
 var (
@@ -85,6 +86,7 @@ const (
 	Readonly            = "readonly"
 	LogRows             = "log_rows"
 	verifyNode          = "verifynode"
+	disableNoTimeFilter = "disable_no_time_filter"
 )
 
 var (
@@ -104,6 +106,14 @@ func SetQuerySeriesLimit(limit int) {
 
 func GetQuerySeriesLimit() int {
 	return querySeriesLimit
+}
+
+func SetDisableNoTimeFilter(swithon bool) {
+	query.DisableNoTimeFilter = swithon
+}
+
+func GetDisableNoTimeFilter() bool {
+	return query.DisableNoTimeFilter
 }
 
 type LogRowsRule struct {
@@ -223,6 +233,13 @@ func ProcessRequest(req netstorage.SysCtrlRequest, resp *strings.Builder) (err e
 			return fmt.Errorf("invalid enabled:%v", enabled)
 		}
 		executor.SetEnableForceBroadcastQuery(enabled)
+		res := "\n\tsuccess"
+		resp.WriteString(res)
+	case disableNoTimeFilter:
+		if switchon := req.Param()["switchon"]; switchon != "true" && switchon != "false" {
+			return fmt.Errorf("invalid bool:%v", switchon)
+		}
+		SetDisableNoTimeFilter(req.Param()["switchon"] == "true")
 		res := "\n\tsuccess"
 		resp.WriteString(res)
 	default:

@@ -23,12 +23,12 @@ package executor
 import (
 	"bytes"
 	"container/heap"
+	"github.com/openGemini/openGemini/open_src/influx/query"
 	"sort"
 
 	"github.com/openGemini/openGemini/engine/hybridqp"
 	"github.com/openGemini/openGemini/lib/rand"
 	"github.com/openGemini/openGemini/lib/record"
-	"github.com/openGemini/openGemini/open_src/influx/query"
 )
 
 type FloatPoint struct {

@@ -162,6 +162,7 @@ func NewServer(conf config.Config, cmd *cobra.Command, logger *Logger.Logger) (a
 	s.initStatisticsPusher()
 	s.httpService.Handler.StatisticsPusher = s.statisticsPusher
 	syscontrol.SetQueryParallel(int64(c.HTTP.ChunkReaderParallel))
+	syscontrol.SetDisableNoTimeFilter(c.HTTP.DisableNoTimeFilter)
 	executor.SetPipelineExecutorResourceManagerParas(int64(c.Common.MemoryLimitSize), time.Duration(c.Common.MemoryWaitTime))
 	executor.IgnoreEmptyTag = c.Common.IgnoreEmptyTag
 
